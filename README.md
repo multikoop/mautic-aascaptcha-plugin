@@ -12,3 +12,8 @@ Navigate to the Plugins page and click "Install/Upgrade Plugins". You should now
 
 ## Usage in Mautic Form
 Add "AAS Captcha" field to the Form and save changes.
+
+## Kudos
+
+Thanks to Konstantin and the reCaptcha Plugin. This plugin is heavily based on this one https://github.com/KonstantinCodes/mautic-recaptcha
+
