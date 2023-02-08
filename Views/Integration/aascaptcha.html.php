@@ -36,21 +36,10 @@ HTML;
 
 $jsElement = <<<JSELEMENT
 	<script type="text/javascript">    
-        window["_aas"] = window["_aas"] || {};
-        _aas["host"] = window.location.hostname;
-        _aas["baseUrl"] = "{$base_url}";
-        _aas["formName"] = "{$formName}";        
-        _aas["clientUserAgent"] = window.navigator.userAgent;
                
         
         async function getAASCaptcha_{$hashedFormName}() {
-            //document.getElementById("mauticform_input_aasform_emailadresse").value = "ak@enpit.de";
-            //document.getElementById("mauticform_input_aasform_ba_captcha").value = "asdf33";
-
             
-            //document.getElementById("aas_captcha_{$hashedFormName}_challengeid").value = "challengeId4711";
-            //document.getElementById("aas_captcha_{$hashedFormName}_sessionid").value = "sessionId4711";
-
 
             fetch('{$aasBaseUrl}/pc/v1/assignment', {
                 method: 'POST',
@@ -69,10 +58,7 @@ $jsElement = <<<JSELEMENT
                 }
                 return Promise.reject(response);
             }).then(function (data) {
-                window["_aas"] = window["_aas"] || {};
-                _aas["challenge_id"] = data["challengeId"];
-                _aas["session_id"] = data["sessionId"];
-
+                
                 let inputChallengeId = document.createElement("input");
                 inputChallengeId.setAttribute("type", "hidden");
                 inputChallengeId.setAttribute("name", "mauticform[{$field['alias']}_challengeid]");
@@ -86,11 +72,8 @@ $jsElement = <<<JSELEMENT
                 //append to form element that you want .
                 document.getElementById("{$containerId}").appendChild(inputChallengeId);
                 document.getElementById("{$containerId}").appendChild(inputSessionId);
-
-                //document.getElementById("aas_captcha_{$hashedFormName}_challengeid").value = data["challengeId"];
-                //document.getElementById("aas_captcha_{$hashedFormName}_sessionid").value = data["sessionId"];
-
-                let url = '{$aasBaseUrl}/ct/v1/captcha/' + _aas["challenge_id"] + '?type=image&languageIso639Code=de';
+                
+                let url = '{$aasBaseUrl}/ct/v1/captcha/' + data["challengeId"] + '?type=image&languageIso639Code=de';
                 
                 console.info(url);
                 let img = document.getElementById("aas_captcha_{$hashedFormName}");
@@ -103,8 +86,7 @@ $jsElement = <<<JSELEMENT
         
         }
  
-        window.onload = (e) => {
-            window["_aas"] = window["_aas"] || {};
+        window.onload = (e) => {        
             getAASCaptcha_{$hashedFormName}();
         }    
 </script>
@@ -114,9 +96,7 @@ $html = <<<HTML
     {$jsElement}            
     <div $containerAttr>
         <img id="aas_captcha_{$hashedFormName}" src="#" style="visibility:hidden;">
-        {$label}
-        <!--input type="hidden" id="aas_captcha_{$hashedFormName}_challengeid" name="mauticform[{$field['alias']}_challengeid]">
-        <input type="hidden" id="aas_captcha_{$hashedFormName}_sessionid" name="mauticform[{$field['alias']}_sessionid]"-->
+        {$label}        
         <input $inputAttr>
         <span class="mauticform-errormsg" style="display: none;"></span>
     </div>

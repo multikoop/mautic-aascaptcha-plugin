@@ -27,7 +27,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Psr\Log\LoggerInterface;
-use Monolog\Logger;
 
 class FormSubscriber implements EventSubscriberInterface
 {
@@ -93,7 +92,7 @@ class FormSubscriber implements EventSubscriberInterface
         AAScaptchaClient $aascaptchaClient,
         LeadModel $leadModel,
         TranslatorInterface $translator,
-        Logger $logger,
+        LoggerInterface $logger,
         RequestStack $requestStack
     ) {
         $this->requestStack     = $requestStack;
@@ -176,7 +175,7 @@ class FormSubscriber implements EventSubscriberInterface
         $valueSessionId = $this->requestStack->getCurrentRequest()->get('mauticform')[$fieldAlias.'_sessionid'];
 
 
-        //$this->logger->error("event.getValue_() ".$event->getValue());        
+        //$this->logger->info("event.getValue_() ".$event->getValue());        
 
         if ($this->aascaptchaClient->verify($event->getValue(), $valueChallengeId, $valueSessionId, $event->getField())) {
             return;
